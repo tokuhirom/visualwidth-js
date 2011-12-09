@@ -8,14 +8,15 @@ use autodie;
 use Unicode::EastAsianWidth;
 
 xxx(InFullwidth());
-xxx(InHalfwidth());
+# xxx(InHalfwidth());
 
 sub xxx {
     my $pattern = shift;
 
     print "[";
     for my $line (split /\n/, $pattern) {
-        my ($beg, $end) =split /\t/, $line;
+        my ($beg, $end) = split /\t/, $line;
+        next unless length($beg) == 5;
         if ($beg eq $end) {
             print "\\u$beg";
         } else {

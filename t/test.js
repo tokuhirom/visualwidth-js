@@ -1,6 +1,7 @@
 subtest('width', function () {
     is(width('あいうえお'), 10);
     is(width('...'), 3);
+    is(width('Shinjuku'), 8);
 });
 subtest('width/surrogate pair', function () {
     is(width(String.fromCharCode(0xD840, 0xDC0B)), 2);
@@ -9,6 +10,8 @@ subtest('width/surrogate pair', function () {
 });
 
 subtest('truncate', function () {
+    is(truncate('無印良品 アキバ・トリム', 20, '...'), '無印良品 アキバ・...');
+    is(truncate('Shinjuku', 15, '…'), 'Shinjuku');
     is(truncate('あいうえお', 12, '...'), 'あいうえお');
     is(truncate('あいうえお', 11, '...'), 'あいうえお');
     is(truncate('あいうえお', 10, '...'), 'あいうえお');
