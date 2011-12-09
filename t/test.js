@@ -2,6 +2,7 @@ subtest('width', function () {
     is(width('あいうえお'), 10);
     is(width('...'), 3);
     is(width('Shinjuku'), 8);
+    is(width("\u2026"), 2); // ambiguous char should be full width
 });
 subtest('width/surrogate pair', function () {
     is(width(String.fromCharCode(0xD840, 0xDC0B)), 2);
