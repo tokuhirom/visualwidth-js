@@ -1,3 +1,4 @@
+// http://tokuhirom.mit-license.org
 (function () {
 "use strict";
 
@@ -25,7 +26,7 @@ function jlength(string) {
 
 function jtruncate(string, length, suffix) {
     var ret = '',
-        c,
+        c, clen,
         counter=0,
         chars = string.split(''),
         i, l,
@@ -36,8 +37,8 @@ function jtruncate(string, length, suffix) {
     }
 
     for (i=0, l=chars.length; i<l && counter < length; i++) {
-        var c = chars[i];
-        var clen = jlength(c);
+        c = chars[i];
+        clen = jlength(c);
         if (counter + clen + slen > length) {
             return ret + suffix;
         }
