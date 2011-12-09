@@ -5,6 +5,7 @@ subtest('width', function () {
     is(width("\u2026"), 2); // ambiguous char should be full width
 });
 subtest('width/surrogate pair', function () {
+    is(width(String.fromCharCode(0xD800, 0xDC00)), 1); // U+10000 LINEAR B SYLLABLE B008 A (first non-BMP code point)    ( half width )
     is(width(String.fromCharCode(0xD840, 0xDC0B)), 2);
     is(width(String.fromCharCode(0xD869, 0xDEB2)), 2);
     is(width(String.fromCharCode(0xD840, 0xDC0B) + String.fromCharCode(0xD869, 0xDEB2)), 4);

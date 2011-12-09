@@ -15,17 +15,20 @@ xxx(InFullwidth());
 sub xxx {
     my $pattern = shift;
 
-    print "[";
+    my @ret;
+    my @retS; # surrogates
     for my $line (split /\n/, $pattern) {
         my ($beg, $end) = split /\t/, $line;
-        next if length($beg) >= 5;
+        my $t = length($beg) >= 5 ? \@retS : \@ret;
+        my $varname = length($beg) >= 5 ? 'cp' : 'c';
         if ($beg eq $end) {
-            print "\\u$beg";
+            push @$t, "(0x$beg == $varname)";
         } else {
-            print "\\u$beg-\\u$end";
+            push @$t, "(0x$beg <= $varname && $varname <= 0x$end)";
         }
     }
-
-    print "]\n";
+    say join(" || ", @ret);
+    say '';
+    say join(" || ", @retS);
 }
 

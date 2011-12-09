@@ -15,20 +15,31 @@ VisualWidth.width = width;
 
 function width(string) {
     var counter=0,
-        chars = string.split(''),
-        i, l;
+        i, l, c, cp;
 
-    for (i=0, l=chars.length; i<l; i++) {
-        var c = chars[i].charAt(0);
+    for (i=0, l=string.length; i<l; i++) {
+        c = string.charCodeAt(i);
         if (0xD800 <= c && c <= 0xD8FF) { // surrogate pair
             // only [\u20000-\u2A6D6\u2A6D7-\u2F7FF\u2F800-\u2FA1D\u2FA1E-\u2FFFD\u30000-\u3FFFD] is full width.
-            // but i think japanese chars in surrogate pair is always full width.
-            counter += 2;
+            cp = 0x10000 + ((c & 0x3FF) << 10) | (string.charCodeAt(i+1) & 0x3FF);
+            if (
+                (0x20000 <= cp && cp <= 0x2A6D6) || (0x2A6D7 <= cp && cp <= 0x2F7FF) || (0x2F800 <= cp && cp <= 0x2FA1D) || (0x2FA1E <= cp && cp <= 0x2FFFD) || (0x30000 <= cp && cp <= 0x3FFFD) || (0xE0100 <= cp && cp <= 0xE01EF) || (0xF0000 <= cp && cp <= 0xFFFFD) || (0x100000 <= cp && cp <= 0x10FFFD)
+            ) {
+                counter += 2;
+            } else {
+                counter += 1;
+            }
             i++;
         } else {
             // normal chars
             // Note: I made ambiguous character is 'full-width'. since I'm Japanese.
-            counter += chars[i].match(/[\u3000\uFF01-\uFF60\uFFE0-\uFFE6\u1100-\u115F\u2329-\u232A\u2E80-\u2FFB\u3001-\u303E\u3041-\u33FF\u3400-\u4DB5\u4E00-\u9FBB\uA000-\uA4C6\uAC00-\uD7A3\uF900-\uFAD9\uFE10-\uFE19\uFE30-\uFE6B\u00A1\u00A4\u00A7-\u00A8\u00AA\u00AD-\u00AE\u00B0-\u00B4\u00B6-\u00BA\u00BC-\u00BF\u00C6\u00D0\u00D7-\u00D8\u00DE-\u00E1\u00E6\u00E8-\u00EA\u00EC-\u00ED\u00F0\u00F2-\u00F3\u00F7-\u00FA\u00FC\u00FE\u0101\u0111\u0113\u011B\u0126-\u0127\u012B\u0131-\u0133\u0138\u013F-\u0142\u0144\u0148-\u014B\u014D\u0152-\u0153\u0166-\u0167\u016B\u01CE\u01D0\u01D2\u01D4\u01D6\u01D8\u01DA\u01DC\u0251\u0261\u02C4\u02C7\u02C9-\u02CB\u02CD\u02D0\u02D8-\u02DB\u02DD\u02DF\u0300-\u036F\u0391-\u03A9\u03B1-\u03C1\u03C3-\u03C9\u0401\u0410-\u044F\u0451\u2010\u2013-\u2016\u2018-\u2019\u201C-\u201D\u2020-\u2022\u2024-\u2027\u2030\u2032-\u2033\u2035\u203B\u203E\u2074\u207F\u2081-\u2084\u20AC\u2103\u2105\u2109\u2113\u2116\u2121-\u2122\u2126\u212B\u2153-\u2154\u215B-\u215E\u2160-\u216B\u2170-\u2179\u2190-\u2199\u21B8-\u21B9\u21D2\u21D4\u21E7\u2200\u2202-\u2203\u2207-\u2208\u220B\u220F\u2211\u2215\u221A\u221D-\u2220\u2223\u2225\u2227-\u222C\u222E\u2234-\u2237\u223C-\u223D\u2248\u224C\u2252\u2260-\u2261\u2264-\u2267\u226A-\u226B\u226E-\u226F\u2282-\u2283\u2286-\u2287\u2295\u2299\u22A5\u22BF\u2312\u2460-\u24E9\u24EB-\u254B\u2550-\u2573\u2580-\u258F\u2592-\u2595\u25A0-\u25A1\u25A3-\u25A9\u25B2-\u25B3\u25B6-\u25B7\u25BC-\u25BD\u25C0-\u25C1\u25C6-\u25C8\u25CB\u25CE-\u25D1\u25E2-\u25E5\u25EF\u2605-\u2606\u2609\u260E-\u260F\u2614-\u2615\u261C\u261E\u2640\u2642\u2660-\u2661\u2663-\u2665\u2667-\u266A\u266C-\u266D\u266F\u273D\u2776-\u277F\uE000-\uF8FF\uFE00-\uFE0F\uFFFD]/) ? 2 : 1;
+            if (
+                (0x3000 == c) || (0xFF01 <= c && c <= 0xFF60) || (0xFFE0 <= c && c <= 0xFFE6) || (0x1100 <= c && c <= 0x115F) || (0x2329 <= c && c <= 0x232A) || (0x2E80 <= c && c <= 0x2FFB) || (0x3001 <= c && c <= 0x303E) || (0x3041 <= c && c <= 0x33FF) || (0x3400 <= c && c <= 0x4DB5) || (0x4E00 <= c && c <= 0x9FBB) || (0xA000 <= c && c <= 0xA4C6) || (0xAC00 <= c && c <= 0xD7A3) || (0xF900 <= c && c <= 0xFAD9) || (0xFE10 <= c && c <= 0xFE19) || (0xFE30 <= c && c <= 0xFE6B) || (0x00A1 == c) || (0x00A4 == c) || (0x00A7 <= c && c <= 0x00A8) || (0x00AA == c) || (0x00AD <= c && c <= 0x00AE) || (0x00B0 <= c && c <= 0x00B4) || (0x00B6 <= c && c <= 0x00BA) || (0x00BC <= c && c <= 0x00BF) || (0x00C6 == c) || (0x00D0 == c) || (0x00D7 <= c && c <= 0x00D8) || (0x00DE <= c && c <= 0x00E1) || (0x00E6 == c) || (0x00E8 <= c && c <= 0x00EA) || (0x00EC <= c && c <= 0x00ED) || (0x00F0 == c) || (0x00F2 <= c && c <= 0x00F3) || (0x00F7 <= c && c <= 0x00FA) || (0x00FC == c) || (0x00FE == c) || (0x0101 == c) || (0x0111 == c) || (0x0113 == c) || (0x011B == c) || (0x0126 <= c && c <= 0x0127) || (0x012B == c) || (0x0131 <= c && c <= 0x0133) || (0x0138 == c) || (0x013F <= c && c <= 0x0142) || (0x0144 == c) || (0x0148 <= c && c <= 0x014B) || (0x014D == c) || (0x0152 <= c && c <= 0x0153) || (0x0166 <= c && c <= 0x0167) || (0x016B == c) || (0x01CE == c) || (0x01D0 == c) || (0x01D2 == c) || (0x01D4 == c) || (0x01D6 == c) || (0x01D8 == c) || (0x01DA == c) || (0x01DC == c) || (0x0251 == c) || (0x0261 == c) || (0x02C4 == c) || (0x02C7 == c) || (0x02C9 <= c && c <= 0x02CB) || (0x02CD == c) || (0x02D0 == c) || (0x02D8 <= c && c <= 0x02DB) || (0x02DD == c) || (0x02DF == c) || (0x0300 <= c && c <= 0x036F) || (0x0391 <= c && c <= 0x03A9) || (0x03B1 <= c && c <= 0x03C1) || (0x03C3 <= c && c <= 0x03C9) || (0x0401 == c) || (0x0410 <= c && c <= 0x044F) || (0x0451 == c) || (0x2010 == c) || (0x2013 <= c && c <= 0x2016) || (0x2018 <= c && c <= 0x2019) || (0x201C <= c && c <= 0x201D) || (0x2020 <= c && c <= 0x2022) || (0x2024 <= c && c <= 0x2027) || (0x2030 == c) || (0x2032 <= c && c <= 0x2033) || (0x2035 == c) || (0x203B == c) || (0x203E == c) || (0x2074 == c) || (0x207F == c) || (0x2081 <= c && c <= 0x2084) || (0x20AC == c) || (0x2103 == c) || (0x2105 == c) || (0x2109 == c) || (0x2113 == c) || (0x2116 == c) || (0x2121 <= c && c <= 0x2122) || (0x2126 == c) || (0x212B == c) || (0x2153 <= c && c <= 0x2154) || (0x215B <= c && c <= 0x215E) || (0x2160 <= c && c <= 0x216B) || (0x2170 <= c && c <= 0x2179) || (0x2190 <= c && c <= 0x2199) || (0x21B8 <= c && c <= 0x21B9) || (0x21D2 == c) || (0x21D4 == c) || (0x21E7 == c) || (0x2200 == c) || (0x2202 <= c && c <= 0x2203) || (0x2207 <= c && c <= 0x2208) || (0x220B == c) || (0x220F == c) || (0x2211 == c) || (0x2215 == c) || (0x221A == c) || (0x221D <= c && c <= 0x2220) || (0x2223 == c) || (0x2225 == c) || (0x2227 <= c && c <= 0x222C) || (0x222E == c) || (0x2234 <= c && c <= 0x2237) || (0x223C <= c && c <= 0x223D) || (0x2248 == c) || (0x224C == c) || (0x2252 == c) || (0x2260 <= c && c <= 0x2261) || (0x2264 <= c && c <= 0x2267) || (0x226A <= c && c <= 0x226B) || (0x226E <= c && c <= 0x226F) || (0x2282 <= c && c <= 0x2283) || (0x2286 <= c && c <= 0x2287) || (0x2295 == c) || (0x2299 == c) || (0x22A5 == c) || (0x22BF == c) || (0x2312 == c) || (0x2460 <= c && c <= 0x24E9) || (0x24EB <= c && c <= 0x254B) || (0x2550 <= c && c <= 0x2573) || (0x2580 <= c && c <= 0x258F) || (0x2592 <= c && c <= 0x2595) || (0x25A0 <= c && c <= 0x25A1) || (0x25A3 <= c && c <= 0x25A9) || (0x25B2 <= c && c <= 0x25B3) || (0x25B6 <= c && c <= 0x25B7) || (0x25BC <= c && c <= 0x25BD) || (0x25C0 <= c && c <= 0x25C1) || (0x25C6 <= c && c <= 0x25C8) || (0x25CB == c) || (0x25CE <= c && c <= 0x25D1) || (0x25E2 <= c && c <= 0x25E5) || (0x25EF == c) || (0x2605 <= c && c <= 0x2606) || (0x2609 == c) || (0x260E <= c && c <= 0x260F) || (0x2614 <= c && c <= 0x2615) || (0x261C == c) || (0x261E == c) || (0x2640 == c) || (0x2642 == c) || (0x2660 <= c && c <= 0x2661) || (0x2663 <= c && c <= 0x2665) || (0x2667 <= c && c <= 0x266A) || (0x266C <= c && c <= 0x266D) || (0x266F == c) || (0x273D == c) || (0x2776 <= c && c <= 0x277F) || (0xE000 <= c && c <= 0xF8FF) || (0xFE00 <= c && c <= 0xFE0F) || (0xFFFD == c)
+            ) {
+                counter += 2;
+            } else {
+                counter += 1;
+            }
         }
     }
     return counter;
