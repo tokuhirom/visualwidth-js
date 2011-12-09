@@ -5,15 +5,13 @@
 	<title>QUnit Test Suite</title>
 	<link rel="stylesheet" href="./qunit-git.css" type="text/css" media="screen">
 	<script type="text/javascript" src="./qunit.js"></script>
-	<script type="text/javascript" src="../strftime.js"></script>
+	<script type="text/javascript" src="../jutil.js"></script>
 	<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.6.1.min.js"></script>
     <script type="text/javascript">
         $(function () {
-            $.ajax({url:'../t/01_strftime.js', dataType: 'text'}).success(function (dat) {
-                with ({is: QUnit.equal, subtest: QUnit.test}) {
-                    subtest('strftime', function () {
-                        eval(dat);
-                    });
+            $.ajax({url:'../t/test.js', dataType: 'text'}).success(function (dat) {
+                with ({is: QUnit.equal, subtest: QUnit.test, jtruncate: JUtil.jtruncate, jlength: JUtil.jlength}) {
+                    eval(dat);
                 }
             });
         });

@@ -1,11 +1,13 @@
 (function () {
 "use strict";
 
+var global = this;
+
 var JUtil;
 if (typeof exports !== 'undefined') {
     JUtil = exports;
 } else {
-    JUtil = global.JUtil = {};
+    global.JUtil = JUtil = {};
 }
 JUtil.jlength = jlength;
 JUtil.jtruncate = jtruncate;
@@ -45,4 +47,4 @@ function jtruncate(string, length, suffix) {
     return ret; // maybe fatal
 }
 
-})();
+}).call(this);
