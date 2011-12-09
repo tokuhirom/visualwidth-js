@@ -9,7 +9,7 @@
 	<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.6.1.min.js"></script>
     <script type="text/javascript">
         $(function () {
-            $.ajax({url:'../t/test.js', dataType: 'text'}).success(function (dat) {
+            $.ajax({url:'../t/test.js', dataType: 'text', cache: false}).success(function (dat) {
                 with ({is: QUnit.equal, subtest: QUnit.test, jtruncate: JUtil.jtruncate, jlength: JUtil.jlength}) {
                     eval(dat);
                 }

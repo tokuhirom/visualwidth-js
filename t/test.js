@@ -1,7 +1,11 @@
 subtest('jlength', function () {
     is(jlength('あいうえお'), 10);
     is(jlength('...'), 3);
-    is(jlength(String.fromCharCode(0xD840, 0xDC0B)), 2); // サロゲートペア
+});
+subtest('jlength/surrogate pair', function () {
+    is(jlength(String.fromCharCode(0xD840, 0xDC0B)), 2);
+    is(jlength(String.fromCharCode(0xD869, 0xDEB2)), 2);
+    is(jlength(String.fromCharCode(0xD840, 0xDC0B) + String.fromCharCode(0xD869, 0xDEB2)), 4);
 });
 
 subtest('jtruncate', function () {
