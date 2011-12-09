@@ -4,16 +4,16 @@
 
 var global = this;
 
-var JUtil;
+var VisualWidth;
 if (typeof exports !== 'undefined') {
-    JUtil = exports;
+    VisualWidth = exports;
 } else {
-    global.JUtil = JUtil = {};
+    global.VisualWidth = VisualWidth = {};
 }
-JUtil.jlength = jlength;
-JUtil.jtruncate = jtruncate;
+VisualWidth.truncate = truncate;
+VisualWidth.width = width;
 
-function jlength(string) {
+function width(string) {
     var counter=0,
         chars = string.split(''),
         i, l;
@@ -24,21 +24,21 @@ function jlength(string) {
     return counter;
 }
 
-function jtruncate(string, length, suffix) {
+function truncate(string, length, suffix) {
     var ret = '',
         c, clen,
         counter=0,
         chars = string.split(''),
         i, l,
-        slen = jlength(suffix);
+        slen = width(suffix);
 
-    if (jlength(string) <= length) {
+    if (width(string) <= length) {
         return string;
     }
 
     for (i=0, l=chars.length; i<l && counter < length; i++) {
         c = chars[i];
-        clen = jlength(c);
+        clen = width(c);
         if (counter + clen + slen > length) {
             return ret + suffix;
         }
