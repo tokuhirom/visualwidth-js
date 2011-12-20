@@ -2,6 +2,7 @@ subtest('width', function () {
     is(width('あいうえお'), 10);
     is(width('...'), 3);
     is(width('Shinjuku'), 8);
+    is(width('…'), 2);
     is(width("\u2026"), 2); // ambiguous char should be full width
 });
 subtest('width/surrogate pair', function () {
@@ -12,7 +13,10 @@ subtest('width/surrogate pair', function () {
 });
 
 subtest('truncate', function () {
+    is(truncate('DOUTOR 新宿アイランド店', 15, '...'), 'DOUTOR 新宿...');
     is(truncate('無印良品 アキバ・トリム', 20, '...'), '無印良品 アキバ・...');
+    is(truncate('VILLAGE VANGUARD 渋谷宇田川', 15, '...'), 'VILLAGE VANG...');
+    is(truncate('VILLAGE VANGUARD 渋谷宇田川', 15, '...').length, 15);
     is(truncate('Shinjuku', 15, '…'), 'Shinjuku');
     is(truncate('あいうえお', 12, '...'), 'あいうえお');
     is(truncate('あいうえお', 11, '...'), 'あいうえお');
