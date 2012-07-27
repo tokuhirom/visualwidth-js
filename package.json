@@ -1,0 +1,22 @@
+{
+  "name": "visualwidth",
+  "version": "0.0.1",
+  "description": "unicode character visual width",
+  "main": "visualwidth.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/tokuhirom/visualwidth-js.git"
+  },
+  "keywords": [
+    "unicode",
+    "visualwidth"
+  ],
+  "author": "Tokuhiro Matsuno <tokuhirom@gmail.com>",
+  "license": "MIT"
+}
