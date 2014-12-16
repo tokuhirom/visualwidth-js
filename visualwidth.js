@@ -6,9 +6,9 @@ var global = this;
 
 var VisualWidth;
 if (typeof exports !== 'undefined') {
-    VisualWidth = exports;
+    module.exports = VisualWidth = width;
 } else {
-    global.VisualWidth = VisualWidth = {};
+    global.VisualWidth = VisualWidth = width;
 }
 VisualWidth.truncate = truncate;
 VisualWidth.width = width;

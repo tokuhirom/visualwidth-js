@@ -9,6 +9,7 @@ SYNOPSIS
 --------
 
     var vw = require('./visualwidth');
+    console.log(vw('あいうabc')); # => 9
     console.log(vw.width('あいうabc')); # => 9
     console.log(vw.truncate('ほう。hasegawaさん', 7, '...'));  => "ほう..."
 
