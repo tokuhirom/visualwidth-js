@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node ./t/test.js"
   },
   "repository": {
     "type": "git",
@@ -18,5 +18,8 @@
     "visualwidth"
   ],
   "author": "Tokuhiro Matsuno <tokuhirom@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "tape": "^3.0.3"
+  }
 }
