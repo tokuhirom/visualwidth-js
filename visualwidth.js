@@ -13,9 +13,13 @@ if (typeof exports !== 'undefined') {
 VisualWidth.truncate = truncate;
 VisualWidth.width = width;
 
-function width(string) {
+function width(string, terminal) {
     var counter=0,
         i, l, c, cp;
+
+    if (terminal) {
+        string = string.replace(/\x1B\[[0-9;]*m/g, '')
+    }
 
     for (i=0, l=string.length; i<l; i++) {
         c = string.charCodeAt(i);
@@ -45,26 +49,42 @@ function width(string) {
     return counter;
 }
 
-function truncate(string, length, suffix) {
+function truncate(string, length, suffix, terminal) {
     var ret = '',
         c, clen,
         counter=0,
-        chars = string.split(''),
+        chars,
         i, l,
-        slen = width(suffix);
+        max,
+        terminalBlock;
 
-    if (width(string) <= length) {
+    if (width(string, terminal) <= length) {
         return string;
     }
 
+    chars = string.split('')
+    max = length - width(suffix, terminal)
+
     for (i=0, l=chars.length; i<l && counter < length; i++) {
         c = chars[i];
-        clen = width(c);
-        if (counter + clen + slen > length) {
+        if (terminalBlock) {
+            if (c === "m") {
+                terminalBlock = false
+            }
+            ret += c;
+            continue;
+        }
+        if (c === "\x1B") {
+            terminalBlock = true;
+        ret += c;
+            continue;
+        }
+        clen = width(c, terminal);
+        counter += clen;
+        if (counter > max) {
             return ret + suffix;
         }
         ret += c;
-        counter += clen;
     }
     return ret; // maybe fatal
 }
