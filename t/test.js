@@ -7,12 +7,13 @@ test('vw.width', function (t) {
     t.equals(vw.width('Shinjuku'), 8);
     t.equals(vw.width('…'), 2);
     t.equals(vw.width("\u2026"), 2); // ambiguous char should be full width
+    //t.equals(vw.width('Inglés'), 6);
     t.end();
 });
 
 test('vw short for vw.width', function (t) {
-  t.equals(vw.width('あいうえお'), 10);
-  t.end();
+    t.equals(vw.width('あいうえお'), 10);
+    t.end();
 })
 
 test('vw.width/surrogate pair', function (t) {
