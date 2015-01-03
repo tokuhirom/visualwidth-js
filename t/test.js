@@ -37,6 +37,22 @@ test('truncate', function (t) {
     t.equals(vw.truncate('あいうえお', 7,  '...'), 'あい...');
     t.equals(vw.truncate('あいうえお', 6,  '...'), 'あ...');
     t.equals(vw.truncate('あいうえお', 5,  '...'), 'あ...');
-    t.end()
+    t.end();
 });
 
+test('terminal characters', function (t) {
+    t.equals(vw.width('\x1B[0mH', true), 1);
+    t.equals(vw.width('\x1B[0mH'), 5);
+    t.equals(vw.width('\x1B[31mH\x1B[0m', true), 1);
+    t.equals(vw.width('\x1B[31mあ\x1B[0m', true), 2);
+    t.equals(vw.width('\x1B[31mあ\x1B[0mB', true), 3);
+    t.end();
+});
+
+test('truncate terminal characters', function (t) {
+    t.equals(vw.truncate('\x1B[31mHello World', 10, '...', true), '\x1B[31mHello W...');
+    t.equals(vw.truncate('\x1B[31mHello World\x1B[0m', 10, '...', true), '\x1B[31mHello W...');
+    t.equals(vw.truncate('\x1B[31mHello World', 10, '\x1B[0m...', true), '\x1B[31mHello W\x1B[0m...');
+    t.equals(vw.truncate('私の\x1B[31mモンスター\x1B[0mハンター', 12, '\x1B[0m…', true), '私の\x1b[31mモンス\x1b[0m…');
+    t.end();
+});
