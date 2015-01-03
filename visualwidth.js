@@ -15,7 +15,14 @@ VisualWidth.truncate = truncate;
 VisualWidth.width = width;
 
 function generateMap(characterList) {
-    var i, l, j, max, map = {};
+    var i, l, j, max, map;
+
+    map = (Int8Array || Array)(characterList.reduce(function (a, b) {
+        if (typeof b !== "number")
+            b = b[1]
+        if (a > b) return a;
+        return b;
+    }))
 
     for (i=0, l=characterList.length; i<l; i++) {
         var entry = characterList[i]
