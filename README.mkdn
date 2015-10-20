@@ -11,5 +11,9 @@ SYNOPSIS
     var vw = require('./visualwidth');
     console.log(vw('あいうabc')); # => 9
     console.log(vw.width('あいうabc')); # => 9
-    console.log(vw.truncate('ほう。hasegawaさん', 7, '...'));  => "ほう..."
+    console.log(vw.truncate('ほう。hasegawaさん', 7, '...')); # => "ほう..."
+    console.log(vw.substr('あいうabc', 1, 4)); # => "いうab"
+    console.log(vw.substring('あいうabc', 2, 4)); # => "うa"
+    console.log(vw.indexOf('あいうabc', 'a')); # => 6
+    console.log(vw.lastIndexOf('あいうabc', 'a')); # => 6)
 
