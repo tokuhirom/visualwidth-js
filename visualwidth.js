@@ -12,6 +12,10 @@ if (typeof exports !== 'undefined') {
 }
 VisualWidth.truncate = truncate;
 VisualWidth.width = width;
+VisualWidth.substr = substr;
+VisualWidth.substring = substring;
+VisualWidth.indexOf = indexOf;
+VisualWidth.lastIndexOf = lastIndexOf;
 
 function width(string, terminal) {
     var counter=0,
@@ -81,7 +85,7 @@ function truncate(string, length, suffix, terminal) {
         }
         if (c === "\x1B") {
             terminalBlock = true;
-        ret += c;
+            ret += c;
             continue;
         }
         clen = width(c, terminal);
@@ -92,6 +96,126 @@ function truncate(string, length, suffix, terminal) {
         ret += c;
     }
     return ret; // maybe fatal
+}
+
+function substr(string, start, length, terminal) {
+    var end;
+    if (length !== null && length !== undefined) {
+        end = start+length
+    }
+    return substring(string, start, end, terminal);
+}
+
+function substring(string, start, end, terminal) {
+    if (end === null || end === undefined) {
+        end = width(string)
+    }
+    if (end < start) {
+        var tmp = end;
+        end = start;
+        start = tmp;
+    }
+
+    var ret = '',
+        counter = 0,
+        c, chars,
+        i, clen,
+        l,
+        terminalBlock;
+    chars = string.split('')
+    for (i=0, l=chars.length; i<l && counter < end; i++) {
+        c = chars[i];
+        if (terminal) {
+            if (terminalBlock) {
+                if (c === "m") {
+                    terminalBlock = false
+                }
+                ret += c;
+                continue;
+            }
+            if (c === "\x1B") {
+                terminalBlock = true;
+                ret += c;
+                continue;
+            }
+        }
+        clen = width(c, terminal);
+        counter += clen;
+        if (counter > start) {
+            ret += c;
+        }
+    }
+    return ret;
+}
+
+function indexOf(string, searchStr, startIndex, terminal) {
+    var target,
+        counter = 0,
+        terminalBlock,
+        chars, i, l;
+    chars = string.split('')
+    if (startIndex === undefined || startIndex === null) {
+        startIndex = 0;
+    }
+
+    function incr(i) {
+        var c = chars[i]
+        if (terminal && (terminalBlock || c === "\u001b")) {
+            terminalBlock = (c !== "m");
+        } else {
+            counter += width(c);
+        }
+    }
+
+    for (i=0, l=chars.length; i<l; i++) {
+        if (counter >= startIndex) {
+            target = string.indexOf(searchStr, i);
+
+            if (target === -1)
+                return -1;
+
+            while(i<target) incr(i++);
+
+            return counter
+        }
+        incr(i);
+    }
+
+    return -1;
+}
+
+function lastIndexOf(string, searchStr, startIndex, terminal) {
+    var ret,
+        counter = 0,
+        c, chars,
+        i, l,
+        maxIndex,
+        terminalBlock,
+        map = {};
+    maxIndex = width(string, terminal)-1;
+    chars = string.split('');
+    if (startIndex === undefined || startIndex === null || startIndex > maxIndex) {
+        startIndex = maxIndex;
+    }
+
+    for (i=0, l=chars.length; i<l; i++) {
+        c = chars[i];
+        map[i] = counter;
+        if (terminal && (terminalBlock || c === "\u001b")) {
+            terminalBlock = (c !== "m");
+        } else {
+            counter += width(c);
+        }
+        if (counter >= startIndex) {
+            ret = string.lastIndexOf(searchStr, i+1);
+            if (ret === -1) {
+                return ret;
+            } else {
+                return map[ret];
+            }
+        }
+    }
+    return -1;
 }
 
 }).call(this);
